@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Biblioteca de literatura relacionada con AlcohÃ³licos AnÃ³nimos en espaÃ±ol: libros, Grapevine y folletos para leer y descargar.">
+  <meta name="theme-color" content="#123452">
+  <title>Literatura de A.A. | Biblioteca en espaÃ±ol</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="catalog.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Ir al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Literatura de A.A., inicio">
+      <span class="brand-mark" aria-hidden="true">A.A.</span>
+      <span class="brand-name">Literatura <em>de A.A.</em></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Secciones</button>
+    <nav id="main-nav" class="main-nav" aria-label="Secciones de la biblioteca">
+      <a href="#oficiales" data-nav="oficiales">Libros oficiales</a>
+      <a href="#relacionados" data-nav="relacionados">Relacionados</a>
+      <a href="#grapevine" data-nav="grapevine">Grapevine</a>
+      <a href="#folletos" data-nav="folletos">Folletos</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="inicio">
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div><div class="book-shape"></div>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">Una biblioteca para compartir</p>
+        <h1>Literatura <span>de A.A.</span></h1>
+        <p class="hero-lead">Lecturas para acompaÃ±ar la recuperaciÃ³n, conocer la historia y encontrar nuevas perspectivas.</p>
+        <a class="primary-link" href="#biblioteca">Explorar la biblioteca <span aria-hidden="true">â†“</span></a>
+      </div>
+      <div class="hero-note"><span>ES</span><span>LECTURA</span><span>COMUNIDAD</span></div>
+    </section>
+
+    <section class="welcome" id="biblioteca">
+      <p class="eyebrow">Bienvenidos</p>
+      <h2>Literatura de A.A. en espaÃ±ol</h2>
+      <p>Un espacio para encontrar libros, publicaciones de Grapevine y folletos en un catÃ¡logo claro, cÃ³modo y fÃ¡cil de consultar desde el telÃ©fono o la computadora.</p>
+      <div class="disclaimer">
+        <span class="disclaimer-icon" aria-hidden="true">i</span>
+        <p>Este sitio comparte material con fines informativos y de recuperaciÃ³n personal. No estÃ¡ afiliado ni representa a AlcohÃ³licos AnÃ³nimos ni a sus entidades de servicio. El material pertenece a sus respectivos autores y se ofrece sin fines de lucro. Se alienta a adquirir la literatura oficial a travÃ©s de los canales autorizados, contribuyendo asÃ­ a sostener los servicios de A.A.</p>
+      </div>
+    </section>
+
+    <section class="library" aria-labelledby="library-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">CatÃ¡logo</p><h2 id="library-title">Explora por secciÃ³n</h2></div>
+        <label class="search-box"><span class="sr-only">Buscar en toda la biblioteca</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="Buscar un tÃ­tuloâ€¦" autocomplete="off"></label>
+      </div>
+      <div class="category-tabs" role="tablist" aria-label="Filtrar por secciÃ³n">
+        <button class="category-tab is-active" type="button" data-filter="todos" role="tab" aria-selected="true">Todo</button>
+        <button class="category-tab" type="button" data-filter="oficiales" role="tab" aria-selected="false">Libros oficiales</button>
+        <button class="category-tab" type="button" data-filter="relacionados" role="tab" aria-selected="false">Relacionados</button>
+        <button class="category-tab" type="button" data-filter="grapevine" role="tab" aria-selected="false">Grapevine</button>
+        <button class="category-tab" type="button" data-filter="folletos" role="tab" aria-selected="false">Folletos</button>
+      </div>
+      <div class="catalog-status" id="catalog-status" aria-live="polite"></div>
+      <div class="catalog-grid" id="catalog-grid"></div>
+      <div class="empty-state" id="empty-state" hidden>No encontramos tÃ­tulos con esa bÃºsqueda. Prueba con otras palabras.</div>
+    </section>
+
+    <section class="translation-note">
+      <p>La mayorÃ­a de los libros publicados en esta pÃ¡gina fueron traducidos con ayuda de inteligencia artificial. Todas las traducciones fueron revisadas antes de su publicaciÃ³n; sin embargo, es posible que aÃºn contengan errores o imprecisiones. Agradecemos la comprensiÃ³n de los lectores y cualquier observaciÃ³n que contribuya a mejorar la calidad de los textos.</p>
+    </section>
+  </main>
+  <footer class="site-footer"><span>Literatura de A.A.</span><span>Creado por Carlos A. Â· Corrientes Â· Argentina</span></footer>
+  <script>
+    const grid = document.querySelector('#catalog-grid');
+    const status = document.querySelector('#catalog-status');
+    const empty = document.querySelector('#empty-state');
+    const search = document.querySelector('#search');
+    const tabs = [...document.querySelectorAll('.category-tab')];
+    const navLinks = [...document.querySelectorAll('[data-nav]')];
+    let activeFilter = 'todos';
+    const categoryNames = { oficiales: 'Libros oficiales de A.A.', relacionados: 'Libros relacionados con A.A.', grapevine: 'Grapevine', folletos: 'Folletos' };
+    const colors = ['#0d5872','#254671','#a64753','#62715a','#bc753e','#785273','#2f7277'];
+    const slug = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    function render() {
+      const query = search.value.trim().toLocaleLowerCase('es');
+      const entries = window.CATALOG.filter(item => (activeFilter === 'todos' || item.category === activeFilter) && item.title.toLocaleLowerCase('es').includes(query));
+      grid.innerHTML = entries.map((item, index) => {
+        const pdfPath = item.pdf ? `pdfs/${item.category}/${encodeURIComponent(item.pdf)}` : '';
+        const coverPath = item.cover ? `covers/${item.category}/${encodeURIComponent(item.cover)}` : '';
+        const cover = coverPath
+          ? `<img src="${coverPath}" alt="Tapa de ${item.title}" loading="lazy">`
+          : `<span class="cover-type">${categoryNames[item.category]}</span><span class="cover-title">${item.title}</span><span class="cover-mark">A.A.</span>`;
+        const action = pdfPath ? `<a class="card-action" href="${pdfPath}" target="_blank" rel="noopener">Abrir PDF <span aria-hidden="true">â†—</span></a>` : `<span class="card-action pending">PDF por incorporar</span>`;
+        return `<article class="book-card"><div class="book-cover ${coverPath ? 'has-image' : ''}" style="--cover-color:${colors[index % colors.length]}">${cover}</div><h3>${item.title}</h3><p class="book-category">${categoryNames[item.category]}</p>${action}</article>`;
+      }).join('');
+      status.textContent = `${entries.length} ${entries.length === 1 ? 'tÃ­tulo' : 'tÃ­tulos'}${query ? ' encontrados' : ' en el catÃ¡logo'}`;
+      empty.hidden = entries.length !== 0;
+    }
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      activeFilter = tab.dataset.filter;
+      tabs.forEach(item => { const selected = item === tab; item.classList.toggle('is-active', selected); item.setAttribute('aria-selected', selected); });
+      render();
+      document.querySelector('#biblioteca').scrollIntoView({ behavior: 'smooth' });
+    }));
+    navLinks.forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      activeFilter = link.dataset.nav;
+      const tab = tabs.find(item => item.dataset.filter === activeFilter);
+      tab?.click();
+    }));
+    search.addEventListener('input', render);
+    const menuToggle = document.querySelector('.menu-toggle');
+    menuToggle.addEventListener('click', () => {
+      const open = menuToggle.getAttribute('aria-expanded') !== 'true';
+      menuToggle.setAttribute('aria-expanded', open);
+      document.querySelector('#main-nav').classList.toggle('is-open', open);
+    });
+    render();
+  </script>
+</body>
+</html>
+
